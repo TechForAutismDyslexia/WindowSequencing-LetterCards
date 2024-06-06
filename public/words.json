@@ -1,0 +1,64 @@
+{
+    "sessions": [
+      {
+        "sessionNumber": 1,
+        "words": [
+          "IF",
+          "GO",
+          "SO",
+          "AS",
+          "NO",
+          "LAY",
+          "SAY",
+          "SEE",
+          "MAD",
+          "MAY",
+          "BEEN",
+          "CALL",
+          "FULL",
+          "NEED",
+          "SEEN"  
+        ]
+      },
+      {
+        "sessionNumber": 2,
+        "words": [
+          "ADD",
+          "BAG",
+          "FED",
+          "JET",
+          "HAM",
+          "HAND",
+          "HUNT",
+          "WILL",
+          "SLOW",
+          "WALK",
+          "DRANK",
+          "SMALL",
+          "ROUND",
+          "MOUSE",
+          "HOUSE"
+        ]
+      },
+      {
+        "sessionNumber": 3,
+        "words": [
+          "CASE",
+          "TAIL",
+          "HOPE",
+          "RANG",
+          "SNOW",
+          "SCREAM",
+          "CARROT",
+          "ESCAPE",
+          "INSIDE",
+          "REASON",
+          "CHEESE",
+          "SISTER",
+          "SKUNK",
+          "PLEASE",
+          "TRAVEL"
+        ]
+      }
+    ]
+  }
