@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/games/wsletters/static/css/main.9d5ce756.css",
+    "main.js": "/games/wsletters/static/js/main.312341b0.js",
+    "static/js/453.03cc1cd5.chunk.js": "/games/wsletters/static/js/453.03cc1cd5.chunk.js",
+    "index.html": "/games/wsletters/index.html",
+    "main.9d5ce756.css.map": "/games/wsletters/static/css/main.9d5ce756.css.map",
+    "main.312341b0.js.map": "/games/wsletters/static/js/main.312341b0.js.map",
+    "453.03cc1cd5.chunk.js.map": "/games/wsletters/static/js/453.03cc1cd5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9d5ce756.css",
+    "static/js/main.312341b0.js"
+  ]
+}
