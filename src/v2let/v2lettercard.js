@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Confetti from 'react-confetti';
+import wordsData from './words.json'; // Import the JSON file
 import './v2ws.css';
-import wordsData from './words.json';
 
 const V2lettercard = () => {
   const [sessions, setSessions] = useState([]);
@@ -16,6 +16,8 @@ const V2lettercard = () => {
   const [startTime, setStartTime] = useState(null);
   const [timeTaken, setTimeTaken] = useState(0);
   const [flippedLetters, setFlippedLetters] = useState([]);
+  const [gameId, setGameId] = useState('some-game-id'); // Replace with actual game ID
+  const [status, setStatus] = useState('in-progress'); // Replace with actual status logic
   const synth = window.speechSynthesis;
 
   useEffect(() => {
@@ -47,24 +49,23 @@ const V2lettercard = () => {
 
   useEffect(() => {
     if (letters.length > 0) {
-      setTimeout(() => flipLetters(), 3000); 
+      setTimeout(() => flipLetters(), 3000);
     }
   }, [letters]);
 
   const formattedTime =
     typeof timeTaken === 'number' && !isNaN(timeTaken) ? timeTaken.toFixed(2) : 0;
 
-    const fetchSessions = () => {
-      try {
-        console.log('Fetched sessions:', wordsData.sessions);
-        setSessions(wordsData.sessions);
-        setCurrentSessionIndex(0);
-        fetchWords(wordsData.sessions[0].words);
-      } catch (error) {
-        console.error('Error fetching sessions:', error);
-      }
-    };
-    
+  const fetchSessions = () => {
+    try {
+      console.log('Fetched sessions:', wordsData.sessions);
+      setSessions(wordsData.sessions);
+      setCurrentSessionIndex(0);
+      fetchWords(wordsData.sessions[0].words);
+    } catch (error) {
+      console.error('Error fetching sessions:', error);
+    }
+  };
 
   const fetchWords = (sessionWords) => {
     const currentWord = sessionWords[currentWordIndex];
@@ -72,7 +73,7 @@ const V2lettercard = () => {
 
     setWords(sessionWords);
     setLetters(lettersArray);
-    setFlippedLetters(Array(lettersArray.length).fill(false)); 
+    setFlippedLetters(Array(lettersArray.length).fill(false));
     generateRandomLetters(lettersArray, currentWord);
   };
 
@@ -147,40 +148,40 @@ const V2lettercard = () => {
     if (currentAnswer === currentWord) {
       setShowConfetti(true);
       pronounceWord('Great job');
+      setStatus('completed');
     } else {
       pronounceWord('Oops, try again');
-      setAnswer(''); 
+      setAnswer('');
     }
 
     const currentTries = tries + 1;
     setTries(currentTries);
     console.log(tries);
     try {
-      console.log('Sending time data to server...');
+      console.log('Sending game data to server...');
       const endTime = new Date();
       const timeTaken = (endTime - startTime) / 1000;
 
-      const response = await fetch('http://localhost:4000/api/save-time-data', {
+      const response = await fetch('https://jwlgamesbackend.vercel.app/api/caretaker/sendgamedata', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          timeStarted: startTime,
-          timeEnded: endTime,
-          timeTaken: timeTaken,
+          gameId: gameId,
           tries: currentTries,
-          currentWord: currentWord,
+          timer: timeTaken,
+          status: status,
         }),
       });
 
       if (response.ok) {
-        console.log('Time data saved successfully');
+        console.log('Game data saved successfully');
       } else {
-        console.error('Failed to save time data:', response.statusText);
+        console.error('Failed to save game data:', response.statusText);
       }
     } catch (error) {
-      console.error('Error saving time data:', error);
+      console.error('Error saving game data:', error);
     }
   };
 
