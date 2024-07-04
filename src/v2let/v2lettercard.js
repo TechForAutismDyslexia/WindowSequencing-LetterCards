@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Confetti from 'react-confetti';
-import wordsData from './words.json'; // Import the JSON file
+import wordsData from './words.json'; 
 import './v2ws.css';
 
 const V2lettercard = () => {
@@ -16,11 +16,12 @@ const V2lettercard = () => {
   const [startTime, setStartTime] = useState(null);
   const [timeTaken, setTimeTaken] = useState(0);
   const [flippedLetters, setFlippedLetters] = useState([]);
-  const [gameId, setGameId] = useState('some-game-id'); // Replace with actual game ID
-  const [status, setStatus] = useState('in-progress'); // Replace with actual status logic
+  const [gameId, setGameId] = useState(null);
+  const [status, setStatus] = useState(false); 
   const synth = window.speechSynthesis;
 
   useEffect(() => {
+    setGameId(generateRandomGameId());
     fetchSessions();
   }, []);
 
@@ -95,6 +96,10 @@ const V2lettercard = () => {
     setWords((prevWords) => [...prevWords.filter((word) => word !== currentWord), currentWord]);
   };
 
+  const generateRandomGameId = () => {
+    return Math.floor(Math.random() * 1000000);
+  };
+
   const pronounceWord = (word) => {
     const utterance = new SpeechSynthesisUtterance(word);
     synth.speak(utterance);
@@ -148,10 +153,11 @@ const V2lettercard = () => {
     if (currentAnswer === currentWord) {
       setShowConfetti(true);
       pronounceWord('Great job');
-      setStatus('completed');
+      setStatus(true); 
     } else {
       pronounceWord('Oops, try again');
       setAnswer('');
+      setStatus(false); 
     }
 
     const currentTries = tries + 1;
@@ -168,12 +174,15 @@ const V2lettercard = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          gameId: gameId,
           tries: currentTries,
           timer: timeTaken,
           status: status,
+          timeStarted: startTime,
+          timeEnded: new Date(),
+          currentWord: sessions[currentSessionIndex]?.words[currentWordIndex] || '',
         }),
       });
+      
 
       if (response.ok) {
         console.log('Game data saved successfully');
@@ -218,8 +227,6 @@ const V2lettercard = () => {
       }, (index + 1) * 3000);
     });
   };
-
-  
   return (
     <div className="wsb">
       <h1 className="desc" text-center style={{ marginTop: '1rem' }} onClick={speakDescription}>
