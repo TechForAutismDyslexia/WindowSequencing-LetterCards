@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Confetti from 'react-confetti';
 import './v2ws.css';
+import wordsData from './words.json';
 
 const V2lettercard = () => {
   const [sessions, setSessions] = useState([]);
@@ -53,17 +54,17 @@ const V2lettercard = () => {
   const formattedTime =
     typeof timeTaken === 'number' && !isNaN(timeTaken) ? timeTaken.toFixed(2) : 0;
 
-  const fetchSessions = () => {
-    fetch('/words.json')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Fetched sessions:', data.sessions);
-        setSessions(data.sessions);
+    const fetchSessions = () => {
+      try {
+        console.log('Fetched sessions:', wordsData.sessions);
+        setSessions(wordsData.sessions);
         setCurrentSessionIndex(0);
-        fetchWords(data.sessions[0].words);
-      })
-      .catch((error) => console.error('Error fetching sessions:', error));
-  };
+        fetchWords(wordsData.sessions[0].words);
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+      }
+    };
+    
 
   const fetchWords = (sessionWords) => {
     const currentWord = sessionWords[currentWordIndex];
@@ -220,7 +221,7 @@ const V2lettercard = () => {
   
   return (
     <div className="wsb">
-      <h1 className="desc" style={{ marginTop: '1rem' }} onClick={speakDescription}>
+      <h1 className="desc" text-center style={{ marginTop: '1rem' }} onClick={speakDescription}>
         Look at the letters carefully. Match your letters to what you see
       </h1>
       <div className="word-cards shadow">
